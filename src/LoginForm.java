@@ -106,7 +106,7 @@ public class LoginForm extends JFrame {
 
         final String DB_URL = "jdbc:mysql://localhost:3306/onlineFood?serverTimezone=UTC";
         final String USERNAME = "root";
-        final String PASSWORD = "Prachip@109";
+        final String PASSWORD = "";
 
         try{
             Connection conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
