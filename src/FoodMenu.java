@@ -154,9 +154,9 @@ public class FoodMenu extends JFrame implements ActionListener{
         file[6] = new String("/image/chickenRice.jpg");
         file[7] = new String("/image/thaiFood.jpg");
         file[8] = new String("/image/vietnamFood.jpg");
-        file[9] = new String("/image/vietnamFood.jpg");
-        file[10] = new String("/image/vietnamFood.jpg");
-        file[11] = new String("/image/vietnamFood.jpg");
+        file[9] = new String("/image/paneertikka.jpg");
+        file[10] = new String("/image/pavbhaji.jpg");
+        file[11] = new String("/image/burger.jpg");
 
         foodLabel[0] = new JLabel("Salad");
         foodLabel[0].setFont(new Font("Verdana", Font.BOLD, 12));
@@ -243,13 +243,13 @@ public class FoodMenu extends JFrame implements ActionListener{
         fileDrinks[2] = new String("/image/blue hawailan.jpg");
         fileDrinks[3] = new String("/image/Pina.jpg");
         fileDrinks[4] = new String("/image/lemon ice.jpg");
-        fileDrinks[5] = new String("/image/lemon ice.jpg");
-        fileDrinks[6] = new String("/image/lemon ice.jpg");
-        fileDrinks[7] = new String("/image/lemon ice.jpg");
-        fileDrinks[8] = new String("/image/lemon ice.jpg");
-        fileDrinks[9] = new String("/image/lemon ice.jpg");
-        fileDrinks[10] = new String("/image/lemon ice.jpg");
-        fileDrinks[11] = new String("/image/lemon ice.jpg");
+        fileDrinks[5] = new String("/image/Margarita.jpg");
+        fileDrinks[6] = new String("/image/Cosmopolitan.jpg");
+        fileDrinks[7] = new String("/image/MoscowMule.jpg");
+        fileDrinks[8] = new String("/image/Martini.jpg");
+        fileDrinks[9] = new String("/image/Watermelonslush.jpg");
+        fileDrinks[10] = new String("/image/Orange Punch.jpg");
+        fileDrinks[11] = new String("/image/hotchoc.jpg");
 
 
         drinkLabel[0] = new JLabel("Raspberry");
@@ -330,16 +330,16 @@ public class FoodMenu extends JFrame implements ActionListener{
         fileDesserts = new String[DESSERT_ELEMENTS];
         fileDesserts[0] = new String("/image/strawberry cake.jpg");
         fileDesserts[1] = new String("/image/chocolate cake.jpg");
-        fileDesserts[2] = new String("/image/chocolate cake.jpg");
-        fileDesserts[3] = new String("/image/chocolate cake.jpg");
-        fileDesserts[4] = new String("/image/chocolate cake.jpg");
-        fileDesserts[5] = new String("/image/chocolate cake.jpg");
-        fileDesserts[6] = new String("/image/chocolate cake.jpg");
-        fileDesserts[7] = new String("/image/chocolate cake.jpg");
-        fileDesserts[8] = new String("/image/chocolate cake.jpg");
-        fileDesserts[9] = new String("/image/chocolate cake.jpg");
-        fileDesserts[10] = new String("/image/chocolate cake.jpg");
-        fileDesserts[11] = new String("/image/chocolate cake.jpg");
+        fileDesserts[2] = new String("/image/cccookies.jpg");
+        fileDesserts[3] = new String("/image/applepie.jpg");
+        fileDesserts[4] = new String("/image/cheesecake.jpg");
+        fileDesserts[5] = new String("/image/carrotcake.jpg");
+        fileDesserts[6] = new String("/image/icecream.jpg");
+        fileDesserts[7] = new String("/image/bananapudding.jpg");
+        fileDesserts[8] = new String("/image/pecanPie.jpg");
+        fileDesserts[9] = new String("/image/bostoncream.jpg");
+        fileDesserts[10] = new String("/image/pantrycake.jpg");
+        fileDesserts[11] = new String("/image/swedishalmondcake.jpg");
 
         dessertLabel[0] = new JLabel("Strawberry Cake");
         dessertLabel[0].setFont(new Font("Verdana", Font.BOLD, 12));

@@ -129,12 +129,12 @@ class MyFrame extends JFrame implements Runnable, ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == menu || e.getSource() == navMenu) {
             FoodMenu main = new FoodMenu();
-            try {
-                main.FoodMenuFrame();
-            } catch (IOException e1) {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
-            }
+                try {
+                    main.FoodMenuFrame();
+                } catch (IOException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
             dispose();
         }
         if (e.getSource() == navSignup) {
