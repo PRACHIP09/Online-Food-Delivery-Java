@@ -128,19 +128,35 @@ class MyFrame extends JFrame implements Runnable, ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == menu || e.getSource() == navMenu) {
-            // FoodMenu foodmenu=new FoodMenu();
-            // foodmenu.initialize();
+            FoodMenu main = new FoodMenu();
+            try {
+                main.FoodMenuFrame();
+            } catch (IOException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
+            dispose();
         }
         if (e.getSource() == navSignup) {
 
             SignUpForm signupform = new SignUpForm();
-            signupform.initialize();
+            try {
+                signupform.initialize();
+            } catch (IOException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
             dispose();
         }
         if (e.getSource() == navLogin) {
-            LoginForm loginForm = new LoginForm();
-            loginForm.initialize();
-            dispose();
+                LoginForm mainFrame = new LoginForm();
+                    try {
+                        mainFrame.initialize();
+                    } catch (IOException e1) {
+                        // TODO Auto-generated catch block
+                        e1.printStackTrace();
+                    }
+                    dispose();
 
         }
     }
