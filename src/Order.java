@@ -1,9 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
-import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
-import javax.swing.border.EmptyBorder;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -26,7 +24,7 @@ setTitle("Registration Form");
 //setResizable(true); 
 c.setLayout(null);
 
-c.setBackground(Color.decode("#9CCBED"));
+c.setBackground(Color.decode("#00B298"));
 
 lbl = new JLabel("Happy Ordering ");
 lbl.setBounds(650,80,300,35);
@@ -87,18 +85,16 @@ label4.setBounds(850,400,300,27);
 label4.setFont(new Font("verdana" ,Font.BOLD, 22));
 c.add(label4);
 
-BufferedImage myPicture;
-myPicture = ImageIO.read(getClass().getResource("/image/order.jpg"));
-screen = new JLabel(new ImageIcon(myPicture));
-screen.setBounds(0,-90,550, 800);
-screen.setBorder(new EmptyBorder(300,60,10,10));
+Image myPicture = ImageIO.read(getClass().getResource("/image/order.jpg"));
+Image imageScaled = myPicture.getScaledInstance(550,850,Image.SCALE_SMOOTH);
+screen = new JLabel(new ImageIcon(imageScaled));
+screen.setBounds(-10,-50,550, 800);
 c.add(screen);
 //submit button
 submit = new JButton("Submit");
 submit.setBounds(650,550,170,30);
 submit.setFont(new Font("verdana" ,Font.BOLD, 18));
 c.add(submit);
-//submit.addActionListener(this);
 submit.addActionListener(new ActionListener() {
 
     @Override
@@ -131,16 +127,5 @@ home.addActionListener(new ActionListener() {
     }
 });
 
-//new Thread(this).start();
-}
-//display of form details
-// screen = new JLabel();
-// screen.setBounds(850,27 ,500,850);
-// screen.setBorder(new EmptyBorder(300,60,10,10));
-// screen.setFont(new Font("verdana" ,Font.BOLD, 27));
-// c.add(screen);
-
-        
-//message
-        
+} 
 }

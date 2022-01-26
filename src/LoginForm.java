@@ -4,9 +4,7 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.sql.*;
 import javax.swing.*;
-import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
-import javax.swing.border.EmptyBorder;
 
 //import com.formdev.flatlaf.FlatDarculaLaf;
 
@@ -21,6 +19,7 @@ public class LoginForm extends JFrame {
         Container c = getContentPane();
         c.setLayout(null);
         lblHead = new JLabel("Login");
+        c.setBackground(Color.decode("#00B298"));
         lblHead.setBounds(650,80,300,35);
         lblHead.setFont(new Font("verdana" ,Font.BOLD, 27));
         c.add(lblHead);
@@ -51,11 +50,10 @@ public class LoginForm extends JFrame {
         pfPassword.setFont(new Font("verdana" ,Font.BOLD, 15));
         c.add(pfPassword);
 
-        BufferedImage myPicture;
-        myPicture = ImageIO.read(getClass().getResource("/image/order.jpg"));
-        screen = new JLabel(new ImageIcon(myPicture));
-        screen.setBounds(0,-90,550, 800);
-        screen.setBorder(new EmptyBorder(300,60,10,10));
+        Image myPicture = ImageIO.read(getClass().getResource("/image/loginpic.jpg"));
+        Image imageScaled = myPicture.getScaledInstance(650,850,Image.SCALE_SMOOTH);
+        screen = new JLabel(new ImageIcon(imageScaled));
+        screen.setBounds(-10,-50,600, 800);
         c.add(screen);
 
         /***** Buttons Panel *****/
