@@ -15,7 +15,7 @@ public class SignUpForm extends JFrame {
     public void initialize() throws IOException {
         Container c = getContentPane();
         c.setLayout(null);
-        c.setBackground(Color.decode("#00B298"));
+        c.setBackground(Color.decode("#2ADDC0"));
         lblHead = new JLabel("Sign Up ");
         lblHead.setBounds(650,80,300,35);
         lblHead.setFont(new Font("verdana" ,Font.BOLD, 27));

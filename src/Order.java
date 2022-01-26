@@ -24,7 +24,7 @@ setTitle("Registration Form");
 //setResizable(true); 
 c.setLayout(null);
 
-c.setBackground(Color.decode("#00B298"));
+c.setBackground(Color.decode("#2ADDC0"));
 
 lbl = new JLabel("Happy Ordering ");
 lbl.setBounds(650,80,300,35);

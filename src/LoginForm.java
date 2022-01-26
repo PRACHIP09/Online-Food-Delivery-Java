@@ -19,7 +19,7 @@ public class LoginForm extends JFrame {
         Container c = getContentPane();
         c.setLayout(null);
         lblHead = new JLabel("Login");
-        c.setBackground(Color.decode("#00B298"));
+        c.setBackground(Color.decode("#2ADDC0"));
         lblHead.setBounds(650,80,300,35);
         lblHead.setFont(new Font("verdana" ,Font.BOLD, 27));
         c.add(lblHead);
