@@ -3,11 +3,12 @@ import java.awt.*;
 import java.io.IOException;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
+import java.awt.event.*;
 
-class MyFrame extends JFrame implements Runnable {
+class MyFrame extends JFrame implements Runnable, ActionListener {
     Container c;
-    JLabel title, ad, label, image, label1,title2,image2;
-    JButton menu;
+    JLabel title, ad, label, image, label1, title2, image2;
+    JButton menu, navMenu, navLogin, navSignup;
 
     public MyFrame() throws IOException {
         setTitle("Advertisement");
@@ -67,13 +68,38 @@ class MyFrame extends JFrame implements Runnable {
         label1.setLocation(800, 360);
         c.add(label1);
 
-        menu=new JButton("Menu");
-        menu.setSize(100,50);
+        menu = new JButton("Menu");
+        menu.setSize(100, 50);
         menu.setLocation(830, 420);
         menu.setBackground(Color.green);
         menu.setForeground(Color.darkGray);
         c.add(menu);
 
+        navLogin = new JButton("Login");
+        navLogin.setSize(100, 30);
+        navLogin.setLocation(850, 30);
+        navLogin.setBackground(Color.darkGray);
+        navLogin.setForeground(Color.white);
+        c.add(navLogin);
+
+        navSignup = new JButton("Signup");
+        navSignup.setSize(100, 30);
+        navSignup.setLocation(940, 30);
+        navSignup.setBackground(Color.darkGray);
+        navSignup.setForeground(Color.white);
+        c.add(navSignup);
+
+        navMenu = new JButton("Menu");
+        navMenu.setSize(100, 30);
+        navMenu.setLocation(1040, 30);
+        navMenu.setBackground(Color.darkGray);
+        navMenu.setForeground(Color.white);
+        c.add(navMenu);
+
+        menu.addActionListener(this);
+        navSignup.addActionListener(this);
+        navMenu.addActionListener(this);
+        navLogin.addActionListener(this);
         new Thread(this).start();
     }
 
@@ -98,13 +124,33 @@ class MyFrame extends JFrame implements Runnable {
         } catch (InterruptedException e) {
         }
     }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == menu || e.getSource() == navMenu) {
+            // FoodMenu foodmenu=new FoodMenu();
+            // foodmenu.initialize();
+        }
+        if (e.getSource() == navSignup) {
+
+            SignUpForm signupform = new SignUpForm();
+            signupform.initialize();
+            dispose();
+        }
+        if (e.getSource() == navLogin) {
+            LoginForm loginForm = new LoginForm();
+            loginForm.initialize();
+            dispose();
+
+        }
+    }
 }
 
 public class Homepage {
 
     public static void main(String[] args) throws IOException {
         MyFrame frame = new MyFrame();
-        frame.setSize(1280,1200);
+        frame.setSize(1280, 1200);
         frame.setLocation(0, 0);
     }
 }
