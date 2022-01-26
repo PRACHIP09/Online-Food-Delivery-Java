@@ -166,7 +166,9 @@ public class Homepage {
 
     public static void main(String[] args) throws IOException {
         MyFrame frame = new MyFrame();
-        frame.setSize(1280, 1200);
-        frame.setLocation(0, 0);
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        frame.setMinimumSize(new Dimension(450, 650));
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
     }
 }

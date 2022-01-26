@@ -2,14 +2,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.*;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-
-//import com.formdev.flatlaf.FlatDarculaLaf;
 
 public class SignUpForm extends JFrame {
     
@@ -20,6 +15,7 @@ public class SignUpForm extends JFrame {
     public void initialize() throws IOException {
         Container c = getContentPane();
         c.setLayout(null);
+        c.setBackground(Color.decode("#2ADDC0"));
         lblHead = new JLabel("Sign Up ");
         lblHead.setBounds(650,80,300,35);
         lblHead.setFont(new Font("verdana" ,Font.BOLD, 27));
@@ -79,11 +75,10 @@ public class SignUpForm extends JFrame {
         pfPassword.setFont(new Font("verdana" ,Font.BOLD, 18));
         c.add(pfPassword);
 
-        BufferedImage myPicture;
-        myPicture = ImageIO.read(getClass().getResource("/image/order.jpg"));
-        screen = new JLabel(new ImageIcon(myPicture));
-        screen.setBounds(0,-90,550, 800);
-        screen.setBorder(new EmptyBorder(300,60,10,10));
+        Image myPicture = ImageIO.read(getClass().getResource("/image/signup.jpg"));
+        Image imageScaled = myPicture.getScaledInstance(650,850,Image.SCALE_SMOOTH);
+        screen = new JLabel(new ImageIcon(imageScaled));
+        screen.setBounds(-10,-50,600, 800);
         c.add(screen);
 
         /***** Buttons Panel *****/
