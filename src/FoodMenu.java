@@ -1,4 +1,4 @@
-// package gui;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
@@ -22,72 +22,74 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
 
+import java.sql.Connection;  
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;  
 
-public class FoodMenu {
-    static private JFrame frame;
-    static private JButton backButton, orderButton;
-    static private JTextField textField;
-    static private GridBagConstraints gbc;
-    private JTable table;
+public class FoodMenu extends JFrame implements ActionListener{
+    java.awt.Container c;
+    JButton backButton, orderButton;
+    JTextField textField;
+    GridBagConstraints gbc;
+    JTable table;
     DefaultTableModel dtm;
     Double[] price;
     Double[] priceDrinks;
     Double[] priceDesserts;
     double totalPrice = 0;
-    double p1, p2, p3, p4, p5, p6, p7, p8, p9;
-    double d1, d2, d3, d4, d5;
-    double de1, de2;
 
-    private JSpinner[] numSpinner;
-    static private JLabel[] foodLabel;
-    static private JLabel[] foodImage;
-    private String[] file;
+    JSpinner[] numSpinner;
+    JLabel[] foodLabel;
+    JLabel[] foodImage;
+    String[] file;
 
-    private JSpinner[] numSpinnerDrinks;
-    static private JLabel[] drinkLabel;
-    static private JLabel[] drinkImage;
-    private String[] fileDrinks;
+    JSpinner[] numSpinnerDrinks;
+    JLabel[] drinkLabel;
+    JLabel[] drinkImage;
+    String[] fileDrinks;
 
-    private JSpinner[] numSpinnerDesserts;
-    static private JLabel[] dessertLabel;
-    static private JLabel[] dessertImage;
-    private String[] fileDesserts;
+    JSpinner[] numSpinnerDesserts;
+    JLabel[] dessertLabel;
+    JLabel[] dessertImage;
+    String[] fileDesserts;
 
-    private static final int ELEMENTS = 9;
-    private static final int DRINK_ELEMENTS = 5;
-    private static final int DESSERT_ELEMENTS = 2;
+    int ELEMENTS = 12;
+    int DRINK_ELEMENTS = 12;
+    int DESSERT_ELEMENTS = 12;
 
     double total = 0;
-    double food1, food2, food3, food4, food5, food6, food7, food8, food9;
-    double drink1, drink2, drink3, drink4, drink5;
-    double pr, pr1;
+    double food1, food2, food3, food4, food5, food6, food7, food8, food9, food10, food11, food12;
+    double drink1, drink2, drink3, drink4, drink5, drink6, drink7, drink8, drink9, drink10, drink11, drink12;
+    double pr, pr1, pr2, pr3, pr4, pr5, pr6, pr7, pr8, pr9, pr10, pr11;
 
     double totalForFoods;
     double totalForDrinks;
     double totalForDesserts;
 
-    void createAndShowGUI() throws IOException {
-        frame = new JFrame("Main Menu ");
-        frame.setBounds(100, 100, 750, 550);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.getContentPane().setLayout(null);
-        frame.setLocationRelativeTo(null);
+    public void FoodMenuFrame() throws IOException {
+        setTitle("Main Menu");
+        setBounds(0, 0,1382,744);
+        //setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        c = getContentPane();
+        c.setLayout(null);
+        // frame.setLocationRelativeTo(null);
         JLabel lblFoodOrdered = new JLabel("Food Ordered");
-        lblFoodOrdered.setBounds(529, 11, 81, 14);
+        lblFoodOrdered.setFont(new Font("Verdana", Font.BOLD, 15));
+        lblFoodOrdered.setBounds(980, 11, 200, 24); //set bounds is like mix of set size and location
+        c.add(lblFoodOrdered);
 
-        frame.getContentPane().add(lblFoodOrdered);
-
-        table = new JTable();
-        backButton = new JButton();
-        orderButton = new JButton();
         dtm = new DefaultTableModel(0, 0);
         final String header[] = new String[] { "Item", "Qty", "Price", "Spinner" };
         dtm.setColumnIdentifiers(header);
         dtm.addRow(header);
+
+
         table = new JTable();
         table.setModel(dtm);
-        table.setBounds(475, 31, 1, 1); // int x, int y, int width, int height
-        table.setSize(245, 300); // width,height
+        table.setBounds(920, 40, 400, 500); // int x, int y, int width, int height
+        // table.setSize(245, 300); // width,height
         table.getColumnModel().getColumn(0).setPreferredWidth(80);
         table.getColumnModel().getColumn(1).setPreferredWidth(30);
         table.getColumnModel().getColumn(2).setPreferredWidth(30);
@@ -95,70 +97,48 @@ public class FoodMenu {
                                                             // column
         table.getColumnModel().getColumn(3).setMaxWidth(0); // hide spinner
                                                             // column
-        table.setShowGrid(false); // remove cell boarder
-        frame.getContentPane().add(table);
+        table.setShowGrid(true); // remove cell boarder
+        c.add(table);
+
+
         JLabel lblTotal = new JLabel("Total  : ");
-        lblTotal.setBounds(519, 340, 46, 14);
-        frame.getContentPane().add(lblTotal);
-        textField = new JTextField();
-        textField.setBounds(585, 340, 86, 20);
-        frame.getContentPane().add(textField);
+        lblTotal.setBounds(950, 550, 200, 25);
+        lblTotal.setFont(new Font("verdana" ,Font.BOLD, 15));
+        c.add(lblTotal);
+
+
+        textField = new JTextField(); //for total
+        textField.setBounds(1050, 550, 200, 25);
+        textField.setFont(new Font("verdana" ,Font.BOLD, 18));
+        c.add(textField);
         textField.setColumns(10);
+
+
         orderButton = new JButton("Order");
-        orderButton.setBounds(500, 385, 89, 23);
-        frame.getContentPane().add(orderButton);
+        orderButton.setBounds(950, 600, 89, 23);
+        orderButton.addActionListener(this);
+        c.add(orderButton);
+
+
         backButton = new JButton("Back");
-        backButton.setBounds(610, 385, 89, 23);
-        frame.getContentPane().add(backButton);
+        backButton.setBounds(1050, 600, 89, 23);
+        backButton.addActionListener(this);
+        c.add(backButton);
+
+
         JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
         addIt(tabbedPane, "Foods");
         addIt1(tabbedPane, "Drinks");
         addIt2(tabbedPane, "Desserts");
-        tabbedPane.setBounds(18, 11, 450, 450);
-        frame.getContentPane().add(tabbedPane);
-        frame.setVisible(true);
+        tabbedPane.setBounds(8, 10, 900, 670);
+        c.add(tabbedPane);
 
-        backButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    MainMenu menu = new MainMenu();
-                    menu.main(header);
-                    // menu.createAndShowGUI();
-                    menu.setVisible(true);
-                    // setVisible(false);
-                    frame.dispose();
-                } catch (IOException e1) {
-                    // TODO Auto-generated catch block
-                    e1.printStackTrace();
-                }
-            }
-        });
-
-        orderButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (textField.getText().equals("")) {
-                    JOptionPane.showMessageDialog(null, "You not ordered anything yet");
-                } else {
-                    try {
-                        OrderMenu order = new OrderMenu();
-                        order.main(header);
-                        order.setVisible(true);
-                        setVisible(false);
-                        frame.dispose();
-                    } catch (IOException e1) {
-                        // TODO Auto-generated catch block
-                        e1.printStackTrace();
-                    }
-                }
-            }
-
-        });
+        setVisible(true);
     }
 
     void addIt(JTabbedPane tabbedPane, String text) throws IOException {
         JPanel panel = new JPanel(new GridBagLayout());
         gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 0, 0, 0);
         foodImage = new JLabel[ELEMENTS];
         foodLabel = new JLabel[ELEMENTS];
         numSpinner = new JSpinner[ELEMENTS];
@@ -174,16 +154,34 @@ public class FoodMenu {
         file[6] = new String("/image/chickenRice.jpg");
         file[7] = new String("/image/thaiFood.jpg");
         file[8] = new String("/image/vietnamFood.jpg");
+        file[9] = new String("/image/vietnamFood.jpg");
+        file[10] = new String("/image/vietnamFood.jpg");
+        file[11] = new String("/image/vietnamFood.jpg");
 
         foodLabel[0] = new JLabel("Salad");
+        foodLabel[0].setFont(new Font("Verdana", Font.BOLD, 12));
         foodLabel[1] = new JLabel("Japanese Noodles");
+        foodLabel[1].setFont(new Font("Verdana", Font.BOLD, 12));
         foodLabel[2] = new JLabel("Spaghetti");
+        foodLabel[2].setFont(new Font("Verdana", Font.BOLD, 12));
         foodLabel[3] = new JLabel("Spaghetti Meat Balls");
+        foodLabel[3].setFont(new Font("Verdana", Font.BOLD, 12));
         foodLabel[4] = new JLabel("Noodles");
+        foodLabel[4].setFont(new Font("Verdana", Font.BOLD, 12));
         foodLabel[5] = new JLabel("Kids Spaghetti");
+        foodLabel[5].setFont(new Font("Verdana", Font.BOLD, 12));
         foodLabel[6] = new JLabel("Chicken Rice");
+        foodLabel[6].setFont(new Font("Verdana", Font.BOLD, 12));
         foodLabel[7] = new JLabel("Thai Food");
+        foodLabel[7].setFont(new Font("Verdana", Font.BOLD, 12));
         foodLabel[8] = new JLabel("Vietnam Food");
+        foodLabel[8].setFont(new Font("Verdana", Font.BOLD, 12));
+        foodLabel[9] = new JLabel("Paneer Tikka Masala");
+        foodLabel[9].setFont(new Font("Verdana", Font.BOLD, 12));
+        foodLabel[10] = new JLabel("Pav Bhaji");
+        foodLabel[10].setFont(new Font("Verdana", Font.BOLD, 12));
+        foodLabel[11] = new JLabel("Burger");
+        foodLabel[11].setFont(new Font("Verdana", Font.BOLD, 12));
 
         price[0] = 3.50;
         price[1] = 4.50;
@@ -193,13 +191,16 @@ public class FoodMenu {
         price[5] = 4.00;
         price[6] = 3.50;
         price[7] = 6.50;
-        price[8] = 6.50;
+        price[8] = 7.50;
+        price[9] = 8.50;
+        price[10] = 9.50;
+        price[11] = 5.50;
+
         for (int i = 0; i < ELEMENTS; i++) {
-            System.out.print(file[i]);
         try {
             
             Image image = ImageIO.read(this.getClass().getResource(file[i]));
-            Image imageScaled = image.getScaledInstance(80, 95, Image.SCALE_SMOOTH);
+            Image imageScaled = image.getScaledInstance(125, 125, Image.SCALE_SMOOTH);
             ImageIcon imageIcon = new ImageIcon(imageScaled);
             SpinnerNumberModel spnummodel = new SpinnerNumberModel(0, 0, 10, 1); // value,minimum,maximum,stepSize
             numSpinner[i] = new JSpinner(spnummodel);
@@ -211,9 +212,9 @@ public class FoodMenu {
         }
 
         gbc.gridx = 0; // gridx 0 represent the most left
-        gbc.insets = new Insets(10, 5, 0, 0); // top,left,bottom,right
+        gbc.insets = new Insets(10, 10, 10, 10); // top,left,bottom,right
         for (int i = 0; i < ELEMENTS; i++) {
-            if (i % 3 == 0) {
+            if (i % 4 == 0) {
                 gbc.gridy += 2;
                 gbc.gridx = 0;
             }
@@ -226,52 +227,6 @@ public class FoodMenu {
             gbc.gridx++; // move to next column
             tabbedPane.addTab(text, panel);
         }
-    }
-
-    void addIt2(JTabbedPane tabbedPane, String text) throws IOException {
-        JPanel panel = new JPanel(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        dessertImage = new JLabel[DESSERT_ELEMENTS];
-        dessertLabel = new JLabel[DESSERT_ELEMENTS];
-        numSpinnerDesserts = new JSpinner[DESSERT_ELEMENTS];
-        priceDesserts = new Double[DESSERT_ELEMENTS];
-
-        fileDesserts = new String[DESSERT_ELEMENTS];
-        fileDesserts[0] = new String("/image/strawberry cake.jpg");
-        fileDesserts[1] = new String("/image/chocolate cake.jpg");
-
-        dessertLabel[0] = new JLabel("Strawberry Cake");
-        dessertLabel[1] = new JLabel("Chocolate Cake");
-
-        priceDesserts[0] = 2.50;
-        priceDesserts[1] = 3.00;
-
-        for (int i = 0; i < DESSERT_ELEMENTS; i++) {
-            Image image = ImageIO.read(this.getClass().getResource(fileDesserts[i]));
-            Image imageScaled = image.getScaledInstance(80, 95, Image.SCALE_SMOOTH);
-            ImageIcon imageIcon = new ImageIcon(imageScaled);
-            SpinnerNumberModel spnummodel = new SpinnerNumberModel(0, 0, 10, 1); // value,minimum,maximum,stepSize
-            numSpinnerDesserts[i] = new JSpinner(spnummodel);
-            numSpinnerDesserts[i].addChangeListener(listenerForDesserts);
-            dessertImage[i] = new JLabel(imageIcon);
-        }
-        gbc.gridx = 0; // gridx 0 represent the most left
-        gbc.insets = new Insets(10, 5, 0, 0); // top,left,bottom,right
-        for (int i = 0; i < DESSERT_ELEMENTS; i++) {
-            if (i % 3 == 0) {
-                gbc.gridx = 0;
-                gbc.gridy += 2;
-            }
-            panel.add(dessertImage[i], gbc);
-            gbc.gridy++; // gridy---> add one row,for foodLabel
-            panel.add(dessertLabel[i], gbc);
-            gbc.gridy--; // remove the row
-            gbc.gridx++; // move to next column
-            panel.add(numSpinnerDesserts[i], gbc);
-            gbc.gridx++; // move to next column
-            tabbedPane.addTab(text, panel);
-        }
-
     }
 
     void addIt1(JTabbedPane tabbedPane, String text) throws IOException {
@@ -288,22 +243,57 @@ public class FoodMenu {
         fileDrinks[2] = new String("/image/blue hawailan.jpg");
         fileDrinks[3] = new String("/image/Pina.jpg");
         fileDrinks[4] = new String("/image/lemon ice.jpg");
+        fileDrinks[5] = new String("/image/lemon ice.jpg");
+        fileDrinks[6] = new String("/image/lemon ice.jpg");
+        fileDrinks[7] = new String("/image/lemon ice.jpg");
+        fileDrinks[8] = new String("/image/lemon ice.jpg");
+        fileDrinks[9] = new String("/image/lemon ice.jpg");
+        fileDrinks[10] = new String("/image/lemon ice.jpg");
+        fileDrinks[11] = new String("/image/lemon ice.jpg");
+
 
         drinkLabel[0] = new JLabel("Raspberry");
+        drinkLabel[0].setFont(new Font("Verdana", Font.BOLD, 12));
         drinkLabel[1] = new JLabel("Chocolate Pudding");
+        drinkLabel[1].setFont(new Font("Verdana", Font.BOLD, 12));
         drinkLabel[2] = new JLabel("Blue Hawailan");
+        drinkLabel[2].setFont(new Font("Verdana", Font.BOLD, 12));
         drinkLabel[3] = new JLabel("Pina");
+        drinkLabel[3].setFont(new Font("Verdana", Font.BOLD, 12));
         drinkLabel[4] = new JLabel("Lemon Ice");
+        drinkLabel[4].setFont(new Font("Verdana", Font.BOLD, 12));
+        drinkLabel[5] = new JLabel("Margarita");
+        drinkLabel[5].setFont(new Font("Verdana", Font.BOLD, 12));
+        drinkLabel[6] = new JLabel("Cosmopolitan");
+        drinkLabel[6].setFont(new Font("Verdana", Font.BOLD, 12));
+        drinkLabel[7] = new JLabel("Moscow Mule");
+        drinkLabel[7].setFont(new Font("Verdana", Font.BOLD, 12));
+        drinkLabel[8] = new JLabel("Martini");
+        drinkLabel[8].setFont(new Font("Verdana", Font.BOLD, 12));
+        drinkLabel[9] = new JLabel("Watermelon slush");
+        drinkLabel[9].setFont(new Font("Verdana", Font.BOLD, 12));
+        drinkLabel[10] = new JLabel("Orange Punch");
+        drinkLabel[10].setFont(new Font("Verdana", Font.BOLD, 12));
+        drinkLabel[11] = new JLabel("Hot chocolate");
+        drinkLabel[11].setFont(new Font("Verdana", Font.BOLD, 12));
 
         priceDrinks[0] = 3.50;
         priceDrinks[1] = 4.50;
         priceDrinks[2] = 3.00;
         priceDrinks[3] = 5.00;
         priceDrinks[4] = 3.00;
+        priceDrinks[5] = 3.50;
+        priceDrinks[6] = 4.50;
+        priceDrinks[7] = 3.00;
+        priceDrinks[8] = 5.00;
+        priceDrinks[9] = 3.00;
+        priceDrinks[10] = 3.00;
+        priceDrinks[11] = 5.00;
+
 
         for (int i = 0; i < DRINK_ELEMENTS; i++) {
             Image image = ImageIO.read(this.getClass().getResource(fileDrinks[i]));
-            Image imageScaled = image.getScaledInstance(80, 95, Image.SCALE_SMOOTH);
+            Image imageScaled = image.getScaledInstance(125, 125, Image.SCALE_SMOOTH);
             ImageIcon imageIcon = new ImageIcon(imageScaled);
             SpinnerNumberModel spnummodel = new SpinnerNumberModel(0, 0, 10, 1); // value,minimum,maximum,stepSize
             numSpinnerDrinks[i] = new JSpinner(spnummodel);
@@ -311,9 +301,9 @@ public class FoodMenu {
             drinkImage[i] = new JLabel(imageIcon);
         }
         gbc.gridx = 0; // gridx 0 represent the most left
-        gbc.insets = new Insets(10, 5, 0, 0); // top,left,bottom,right
+        gbc.insets = new Insets(10, 10, 10, 10); // top,left,bottom,right
         for (int i = 0; i < DRINK_ELEMENTS; i++) {
-            if (i % 3 == 0) {
+            if (i % 4 == 0) {
                 gbc.gridx = 0;
                 gbc.gridy += 2;
             }
@@ -329,67 +319,210 @@ public class FoodMenu {
         }
     }
 
+    void addIt2(JTabbedPane tabbedPane, String text) throws IOException {
+        JPanel panel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        dessertImage = new JLabel[DESSERT_ELEMENTS];
+        dessertLabel = new JLabel[DESSERT_ELEMENTS];
+        numSpinnerDesserts = new JSpinner[DESSERT_ELEMENTS];
+        priceDesserts = new Double[DESSERT_ELEMENTS];
+
+        fileDesserts = new String[DESSERT_ELEMENTS];
+        fileDesserts[0] = new String("/image/strawberry cake.jpg");
+        fileDesserts[1] = new String("/image/chocolate cake.jpg");
+        fileDesserts[2] = new String("/image/chocolate cake.jpg");
+        fileDesserts[3] = new String("/image/chocolate cake.jpg");
+        fileDesserts[4] = new String("/image/chocolate cake.jpg");
+        fileDesserts[5] = new String("/image/chocolate cake.jpg");
+        fileDesserts[6] = new String("/image/chocolate cake.jpg");
+        fileDesserts[7] = new String("/image/chocolate cake.jpg");
+        fileDesserts[8] = new String("/image/chocolate cake.jpg");
+        fileDesserts[9] = new String("/image/chocolate cake.jpg");
+        fileDesserts[10] = new String("/image/chocolate cake.jpg");
+        fileDesserts[11] = new String("/image/chocolate cake.jpg");
+
+        dessertLabel[0] = new JLabel("Strawberry Cake");
+        dessertLabel[0].setFont(new Font("Verdana", Font.BOLD, 12));
+        dessertLabel[1] = new JLabel("Chocolate Cake");
+        dessertLabel[1].setFont(new Font("Verdana", Font.BOLD, 12));
+        dessertLabel[2] = new JLabel("Chocolate Chip Cookies");
+        dessertLabel[2].setFont(new Font("Verdana", Font.BOLD, 12));
+        dessertLabel[3] = new JLabel("Apple Pie");
+        dessertLabel[3].setFont(new Font("Verdana", Font.BOLD, 12));
+        dessertLabel[4] = new JLabel("Cheesecake");
+        dessertLabel[4].setFont(new Font("Verdana", Font.BOLD, 12));
+        dessertLabel[5] = new JLabel("Carrot Cake");
+        dessertLabel[5].setFont(new Font("Verdana", Font.BOLD, 12));
+        dessertLabel[6] = new JLabel("Ice Cream");
+        dessertLabel[6].setFont(new Font("Verdana", Font.BOLD, 12));
+        dessertLabel[7] = new JLabel("Banana Pudding");
+        dessertLabel[7].setFont(new Font("Verdana", Font.BOLD, 12));
+        dessertLabel[8] = new JLabel("Pecan pie");
+        dessertLabel[8].setFont(new Font("Verdana", Font.BOLD, 12));
+        dessertLabel[9] = new JLabel("Boston cream pie");
+        dessertLabel[9].setFont(new Font("Verdana", Font.BOLD, 12));
+        dessertLabel[10] = new JLabel("Pantry Crumb Cake");
+        dessertLabel[10].setFont(new Font("Verdana", Font.BOLD, 12));
+        dessertLabel[11] = new JLabel("Swedish Almond Cake");
+        dessertLabel[11].setFont(new Font("Verdana", Font.BOLD, 12));
+
+        priceDesserts[0] = 2.50;
+        priceDesserts[1] = 3.00;
+        priceDesserts[2] = 2.50;
+        priceDesserts[3] = 3.00;
+        priceDesserts[4] = 2.50;
+        priceDesserts[5] = 3.00;
+        priceDesserts[6] = 2.50;
+        priceDesserts[7] = 3.00;
+        priceDesserts[8] = 2.50;
+        priceDesserts[9] = 3.00;
+        priceDesserts[10] = 2.50;
+        priceDesserts[11] = 3.00;
+
+        for (int i = 0; i < DESSERT_ELEMENTS; i++) {
+            Image image = ImageIO.read(this.getClass().getResource(fileDesserts[i]));
+            Image imageScaled = image.getScaledInstance(125, 125, Image.SCALE_SMOOTH);
+            ImageIcon imageIcon = new ImageIcon(imageScaled);
+            SpinnerNumberModel spnummodel = new SpinnerNumberModel(0, 0, 10, 1); // value,minimum,maximum,stepSize
+            numSpinnerDesserts[i] = new JSpinner(spnummodel);
+            numSpinnerDesserts[i].addChangeListener(listenerForDesserts);
+            dessertImage[i] = new JLabel(imageIcon);
+        }
+        gbc.gridx = 0; // gridx 0 represent the most left
+        gbc.insets = new Insets(10, 10, 10, 10); // top,left,bottom,right
+        for (int i = 0; i < DESSERT_ELEMENTS; i++) {
+            if (i % 4 == 0) {
+                gbc.gridx = 0;
+                gbc.gridy += 2;
+            }
+            panel.add(dessertImage[i], gbc);
+            gbc.gridy++; // gridy---> add one row,for foodLabel
+            panel.add(dessertLabel[i], gbc);
+            gbc.gridy--; // remove the row
+            gbc.gridx++; // move to next column
+            panel.add(numSpinnerDesserts[i], gbc);
+            gbc.gridx++; // move to next column
+            tabbedPane.addTab(text, panel);
+        }
+
+    }
+
+    public void actionPerformed(ActionEvent ae)
+    {
+        if(ae.getSource() == backButton)
+        {
+            try {
+                   // menu = new Homepage();
+                    Homepage.main(null);
+                    dispose();
+                } catch (IOException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
+        }
+        else if(ae.getSource() == orderButton)
+        {
+            if (textField.getText().equals("")) 
+            {
+                JOptionPane.showMessageDialog(null, "You not ordered anything yet");
+            } 
+            int total_bill = (int)Math.round(total);
+            User user = getTotalBill(total_bill);
+            if(user != null)
+            {
+                 Order mainFrame = new Order();
+                 try {
+                     mainFrame.initialize(user);
+                 } catch (IOException e1) {
+                     // TODO Auto-generated catch block
+                     e1.printStackTrace();
+                 }
+                 dispose();
+            }
+           
+        }
+    }
+
     ChangeListener listener = new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
 
             final int quantity = (int) ((JSpinner) e.getSource()).getValue();
             final int rows = table.getRowCount();
             for (int row = 0; row < rows; row++) {
-                if (dtm.getValueAt(row, 3) == e.getSource()) {
+                if (dtm.getValueAt(row, 3) == e.getSource()) 
+                {
                     if (dtm.getValueAt(row, 0).equals("Salad")) {
                         dtm.setValueAt(quantity, row, 1); // obj, row, column
-                        dtm.setValueAt(p1 * quantity, row, 2);
-                        food1 = p1 * quantity;
+                        dtm.setValueAt(price[0] * quantity, row, 2);
+                        food1 = price[0] * quantity;
 
                     } else if (dtm.getValueAt(row, 0).equals("Japanese Noodles")) {
 
                         dtm.setValueAt(quantity, row, 1);
-                        dtm.setValueAt(p2 * quantity, row, 2);
-                        food2 = p2 * quantity;
+                        dtm.setValueAt(price[1] * quantity, row, 2);
+                        food2 = price[1] * quantity;
                     } else if (dtm.getValueAt(row, 0).equals("Spaghetti")) {
 
                         dtm.setValueAt(quantity, row, 1);
-                        dtm.setValueAt(p3 * quantity, row, 2);
-                        food3 = p3 * quantity;
+                        dtm.setValueAt(price[2] * quantity, row, 2);
+                        food3 = price[2] * quantity;
                     } else if (dtm.getValueAt(row, 0).equals("Spaghetti Meat Balls")) {
 
                         dtm.setValueAt(quantity, row, 1);
-                        dtm.setValueAt(p4 * quantity, row, 2);
-                        food4 = p4 * quantity;
+                        dtm.setValueAt(price[3] * quantity, row, 2);
+                        food4 = price[3] * quantity;
                     } else if (dtm.getValueAt(row, 0).equals("Noodles")) {
 
                         dtm.setValueAt(quantity, row, 1);
-                        dtm.setValueAt(p5 * quantity, row, 2);
-                        food5 = p5 * quantity;
+                        dtm.setValueAt(price[4] * quantity, row, 2);
+                        food5 = price[4] * quantity;
                     } else if (dtm.getValueAt(row, 0).equals("Kids Spaghetti")) {
 
                         dtm.setValueAt(quantity, row, 1);
-                        dtm.setValueAt(p6 * quantity, row, 2);
-                        food6 = p6 * quantity;
+                        dtm.setValueAt(price[5] * quantity, row, 2);
+                        food6 = price[5] * quantity;
                     } else if (dtm.getValueAt(row, 0).equals("Chicken Rice")) {
 
                         dtm.setValueAt(quantity, row, 1); // obj, row,
                                                             // column
-                        dtm.setValueAt(p7 * quantity, row, 2);
-                        food7 = p7 * quantity;
+                        dtm.setValueAt(price[6] * quantity, row, 2);
+                        food7 = price[6] * quantity;
                     } else if (dtm.getValueAt(row, 0).equals("Thai Food")) {
 
                         dtm.setValueAt(quantity, row, 1); // obj, row,
                                                             // column
-                        dtm.setValueAt(p8 * quantity, row, 2);
-                        food8 = p8 * quantity;
+                        dtm.setValueAt(price[7] * quantity, row, 2);
+                        food8 = price[7] * quantity;
                     } else if (dtm.getValueAt(row, 0).equals("Vietnam Food")) {
 
                         dtm.setValueAt(quantity, row, 1); // obj, row,
                                                             // column
-                        dtm.setValueAt(p9 * quantity, row, 2);
-                        food9 = p9 * quantity;
+                        dtm.setValueAt(price[8] * quantity, row, 2);
+                        food9 = price[8] * quantity;
+                    }else if (dtm.getValueAt(row, 0).equals("Paneer Tikka Masala")) {
+
+                        dtm.setValueAt(quantity, row, 1); // obj, row,
+                                                            // column
+                        dtm.setValueAt(price[9] * quantity, row, 2);
+                        food10 = price[9] * quantity;
+                    }else if (dtm.getValueAt(row, 0).equals("Pav Bhaji")) {
+
+                        dtm.setValueAt(quantity, row, 1); // obj, row,
+                                                            // column
+                        dtm.setValueAt(price[10] * quantity, row, 2);
+                        food11 = price[10] * quantity;
+                    }else if (dtm.getValueAt(row, 0).equals("Burger")) {
+
+                        dtm.setValueAt(quantity, row, 1); // obj, row,
+                                                            // column
+                        dtm.setValueAt(price[11] * quantity, row, 2);
+                        food12 = price[11] * quantity;
                     }
 
                     if (quantity == 0) {
                         dtm.removeRow(row);
                     }
-                    totalForFoods = food1 + food2 + food3 + food4 + food5 + food6 + food7 + food8 + food9;
+                    totalForFoods = food1 + food2 + food3 + food4 + food5 + food6 + food7 + food8 + food9+ food10+ food11+ food12;
                     total = totalForFoods + totalForDrinks + totalForDesserts;
                     textField.setText(total + "");
                     return;
@@ -403,43 +536,44 @@ public class FoodMenu {
                     totalPrice = price[i];
                     switch (foodLabel[i].getText()) {
                     case "Salad":
-                        p1 = 3.50;
-                        food1 = p1;
+                        food1 = price[0];
                         break;
                     case "Japanese Noodles":
-                        p2 = 4.50;
-                        food2 = p2;
+                        food2 = price[1];
                         break;
                     case "Spaghetti":
-                        p3 = 3.70;
-                        food3 = p3;
+                        food3 = price[2];
                         break;
                     case "Spaghetti Meat Balls":
-                        p4 = 4.50;
-                        food4 = p4;
+                        food4 = price[3];
                         break;
                     case "Noodles":
-                        p5 = 5.50;
-                        food5 = p5;
+                        food5 = price[4];
                         break;
                     case "Kids Spaghetti":
-                        p6 = 4.00;
-                        food6 = p6;
+                        food6 = price[5];
                         break;
                     case "Chicken Rice":
-                        p7 = 3.50;
-                        food7 = p7;
+                        food7 = price[6];
                         break;
                     case "Thai Food":
-                        p8 = 6.50;
-                        food8 = p8;
+                        food8 = price[7];
                         break;
                     case "Vietnam Food":
-                        p9 = 6.50;
-                        food9 = p9;
+                        food9 = price[8];
                         break;
+                    case "Paneer Tikka Masala":
+                        food10 = price[9];
+                        break;
+                    case "Pav Bhaji":
+                        food11 = price[10];
+                        break;
+                    case "Burger":
+                        food12 = price[11];
+                        break;
+
                     }
-                    totalForFoods = food1 + food2 + food3 + food4 + food5 + food6 + food7 + food8 + food9;
+                    totalForFoods = food1 + food2 + food3 + food4 + food5 + food6 + food7 + food8 + food9+ food10+ food11+ food12;
                     total = totalForFoods + totalForDrinks + totalForDesserts;
                     textField.setText(total + "");
                     dtm.addRow(new Object[] { foodLabel[i].getText(), quantity, totalPrice, numSpinner[i] });
@@ -460,17 +594,67 @@ public class FoodMenu {
                 if (dtm.getValueAt(row, 3) == e.getSource()) {
                     if (dtm.getValueAt(row, 0).equals("Strawberry Cake")) {
                         dtm.setValueAt(quantity, row, 1); // obj, row,
-                        pr = de1 * quantity; // column
-                        dtm.setValueAt(de1 * quantity, row, 2);
+                        dtm.setValueAt(priceDesserts[0] * quantity, row, 2);
+                        pr =priceDesserts[0] * quantity; // column
                     } else if (dtm.getValueAt(row, 0).equals("Chocolate Cake")) {
                         dtm.setValueAt(quantity, row, 1); // obj, row, // column
-                        dtm.setValueAt(de2 * quantity, row, 2);
-                        pr1 = de2 * quantity;
+                        dtm.setValueAt(priceDesserts[1] * quantity, row, 2);
+                        pr1 = priceDesserts[1] * quantity;
+                    }
+                    else if (dtm.getValueAt(row, 0).equals("Chocolate Chip Cookies")) {
+                        dtm.setValueAt(quantity, row, 1); // obj, row, // column
+                        dtm.setValueAt(priceDesserts[2] * quantity, row, 2);
+                        pr2 = priceDesserts[2] * quantity;
+                    }
+                    else if (dtm.getValueAt(row, 0).equals("Apple Pie")) {
+                        dtm.setValueAt(quantity, row, 1); // obj, row, // column
+                        dtm.setValueAt(priceDesserts[3] * quantity, row, 2);
+                        pr3 = priceDesserts[3] * quantity;
+                    }
+                    else if (dtm.getValueAt(row, 0).equals("Cheesecake")) {
+                        dtm.setValueAt(quantity, row, 1); // obj, row, // column
+                        dtm.setValueAt(priceDesserts[4] * quantity, row, 2);
+                        pr4 = priceDesserts[4] * quantity;
+                    }
+                    else if (dtm.getValueAt(row, 0).equals("Carrot Cake")) {
+                        dtm.setValueAt(quantity, row, 1); // obj, row, // column
+                        dtm.setValueAt(priceDesserts[5] * quantity, row, 2);
+                        pr5 = priceDesserts[5] * quantity;
+                    }
+                    else if (dtm.getValueAt(row, 0).equals("Ice Cream")) {
+                        dtm.setValueAt(quantity, row, 1); // obj, row, // column
+                        dtm.setValueAt(priceDesserts[6] * quantity, row, 2);
+                        pr6 = priceDesserts[6] * quantity;
+                    }
+                    else if (dtm.getValueAt(row, 0).equals("Banana Pudding")) {
+                        dtm.setValueAt(quantity, row, 1); // obj, row, // column
+                        dtm.setValueAt(priceDesserts[7] * quantity, row, 2);
+                        pr7 = priceDesserts[7] * quantity;
+                    }
+                    else if (dtm.getValueAt(row, 0).equals("Pecan pie")) {
+                        dtm.setValueAt(quantity, row, 1); // obj, row, // column
+                        dtm.setValueAt(priceDesserts[8] * quantity, row, 2);
+                        pr8 = priceDesserts[8] * quantity;
+                    }
+                    else if (dtm.getValueAt(row, 0).equals("Boston cream pie")) {
+                        dtm.setValueAt(quantity, row, 1); // obj, row, // column
+                        dtm.setValueAt(priceDesserts[9] * quantity, row, 2);
+                        pr9 = priceDesserts[9] * quantity;
+                    }
+                    else if (dtm.getValueAt(row, 0).equals("Pantry Crumb Cake")) {
+                        dtm.setValueAt(quantity, row, 1); // obj, row, // column
+                        dtm.setValueAt(priceDesserts[10] * quantity, row, 2);
+                        pr10 = priceDesserts[10] * quantity;
+                    }
+                    else if (dtm.getValueAt(row, 0).equals("Swedish Almond Cake")) {
+                        dtm.setValueAt(quantity, row, 1); // obj, row, // column
+                        dtm.setValueAt(priceDesserts[11] * quantity, row, 2);
+                        pr11 = priceDesserts[11] * quantity;
                     }
                     if (quantity == 0) {
                         dtm.removeRow(row);
                     }
-                    totalForDesserts = pr + pr1;
+                    totalForDesserts = pr + pr1 + pr2 + pr3 + pr4 + pr5+ pr6+ pr7+ pr8+ pr9+ pr10+ pr11;
                     total = totalForFoods + totalForDrinks + totalForDesserts;
                     textField.setText(total + "");
                     return;
@@ -484,15 +668,43 @@ public class FoodMenu {
                     totalPrice = priceDesserts[i];
                     switch (dessertLabel[i].getText()) {
                     case "Strawberry Cake":
-                        de1 = 2.50;
-                        pr = de1;
+                        pr = priceDesserts[0];
                         break;
                     case "Chocolate Cake":
-                        de2 = 3.00;
-                        pr1 = de2;
+                        pr1 = priceDesserts[1];
+                        break;
+                    case "Chocolate Chip Cookies":
+                        pr2 = priceDesserts[2];
+                        break;
+                    case "Apple Pie":
+                        pr3 = priceDesserts[3];
+                        break;
+                    case "Cheesecake":
+                        pr4 = priceDesserts[4];
+                        break;
+                    case "Carrot Cake":
+                        pr5 = priceDesserts[5];
+                        break;
+                    case "Ice Cream":
+                        pr6 = priceDesserts[6];
+                        break;
+                    case "Banana Pudding":
+                        pr7 = priceDesserts[7];
+                        break;
+                    case "Pecan pie":
+                        pr8 = priceDesserts[8];
+                        break;
+                    case "Boston cream pie":
+                        pr9 = priceDesserts[9];
+                        break;
+                    case "Pantry Crumb Cake":
+                        pr10 = priceDesserts[10];
+                        break;
+                    case "Swedish Almond Cake":
+                        pr11 = priceDesserts[11];
                         break;
                     }
-                    totalForDesserts = pr + pr1;
+                    totalForDesserts = pr + pr1 + pr2 + pr3 + pr4 + pr5+ pr6+ pr7+ pr8+ pr9+ pr10+ pr11;
                     total = totalForFoods + totalForDrinks + totalForDesserts;
                     textField.setText(total + "");
                     dtm.addRow(new Object[] { dessertLabel[i].getText(), quantity, totalPrice, numSpinnerDesserts[i] });
@@ -501,7 +713,6 @@ public class FoodMenu {
 
             }
         }
-
     };
 
     ChangeListener listenerForDrinks = new ChangeListener() {
@@ -513,39 +724,95 @@ public class FoodMenu {
                 if (dtm.getValueAt(row, 3) == e.getSource()) {
                     if (dtm.getValueAt(row, 0).equals("Raspberry")) {
                         dtm.setValueAt(quantity, row, 1);
-                        dtm.setValueAt(d1 * quantity, row, 2);
-                        drink1 = d1 * quantity;
+                        dtm.setValueAt(priceDrinks[0] * quantity, row, 2);
+                        drink1 = priceDrinks[0] * quantity;
 
                     } else if (dtm.getValueAt(row, 0).equals("Chocolate Pudding")) {
                         dtm.setValueAt(quantity, row, 1); // obj, row,
                                                             // column
-                        dtm.setValueAt(d2 * quantity, row, 2);
-                        drink2 = d2 * quantity;
+                        dtm.setValueAt(priceDrinks[1] * quantity, row, 2);
+                        drink2 = priceDrinks[1] * quantity;
 
                     } else if (dtm.getValueAt(row, 0).equals("Blue Hawailan")) {
 
                         dtm.setValueAt(quantity, row, 1);
-                        dtm.setValueAt(d3 * quantity, row, 2);
-                        drink3 = d3 * quantity;
+                        dtm.setValueAt(priceDrinks[2]* quantity, row, 2);
+                        drink3 = priceDrinks[2] * quantity;
 
                     } else if (dtm.getValueAt(row, 0).equals("Pina")) {
 
                         dtm.setValueAt(quantity, row, 1);
-                        dtm.setValueAt(d4 * quantity, row, 2);
-                        drink4 = d4 * quantity;
+                        dtm.setValueAt(priceDrinks[3] * quantity, row, 2);
+                        drink4 = priceDrinks[3] * quantity;
 
                     } else if (dtm.getValueAt(row, 0).equals("Lemon Ice")) {
 
                         dtm.setValueAt(quantity, row, 1); // obj, row,
                                                             // column
-                        dtm.setValueAt(d5 * quantity, row, 2);
-                        drink5 = d5 * quantity;
+                        dtm.setValueAt(priceDrinks[4]* quantity, row, 2);
+                        drink5 = priceDrinks[4] * quantity;
+
+                    }
+                    else if (dtm.getValueAt(row, 0).equals("Margarita")) {
+
+                        dtm.setValueAt(quantity, row, 1); // obj, row,
+                                                            // column
+                        dtm.setValueAt(priceDrinks[5] * quantity, row, 2);
+                        drink6 = priceDrinks[5] * quantity;
+
+                    }
+                    else if (dtm.getValueAt(row, 0).equals("Cosmopolitan")) {
+
+                        dtm.setValueAt(quantity, row, 1); // obj, row,
+                                                            // column
+                        dtm.setValueAt(priceDrinks[6] * quantity, row, 2);
+                        drink7 = priceDrinks[6] * quantity;
+
+                    }
+                    else if (dtm.getValueAt(row, 0).equals("Moscow Mule")) {
+
+                        dtm.setValueAt(quantity, row, 1); // obj, row,
+                                                            // column
+                        dtm.setValueAt(priceDrinks[7] * quantity, row, 2);
+                        drink8 = priceDrinks[7] * quantity;
+
+                    }
+                    else if (dtm.getValueAt(row, 0).equals("Martini")) {
+
+                        dtm.setValueAt(quantity, row, 1); // obj, row,
+                                                            // column
+                        dtm.setValueAt(priceDrinks[8] * quantity, row, 2);
+                        drink9 = priceDrinks[8] * quantity;
+
+                    }
+                    else if (dtm.getValueAt(row, 0).equals("Watermelon slush")) {
+
+                        dtm.setValueAt(quantity, row, 1); // obj, row,
+                                                            // column
+                        dtm.setValueAt(priceDrinks[9] * quantity, row, 2);
+                        drink10 = priceDrinks[9] * quantity;
+
+                    }
+                    else if (dtm.getValueAt(row, 0).equals("Orange Punch")) {
+
+                        dtm.setValueAt(quantity, row, 1); // obj, row,
+                                                            // column
+                        dtm.setValueAt(priceDrinks[10] * quantity, row, 2);
+                        drink11 = priceDrinks[10] * quantity;
+
+                    }
+                    else if (dtm.getValueAt(row, 0).equals("Hot chocolate")) {
+
+                        dtm.setValueAt(quantity, row, 1); // obj, row,
+                                                            // column
+                        dtm.setValueAt(priceDrinks[11] * quantity, row, 2);
+                        drink12 = priceDrinks[11] * quantity;
 
                     }
                     if (quantity == 0) {
                         dtm.removeRow(row);
                     }
-                    totalForDrinks = drink1 + drink2 + drink3 + drink4 + drink5;
+                    totalForDrinks = drink1 + drink2 + drink3 + drink4 + drink5+ drink6+ drink7+ drink8+ drink9+ drink10+ drink11+ drink12;
                     total = totalForFoods + totalForDrinks + totalForDesserts;
                     textField.setText(total + "");
 
@@ -560,27 +827,43 @@ public class FoodMenu {
                     totalPrice = priceDrinks[i];
                     switch (drinkLabel[i].getText()) {
                     case "Raspberry":
-                        d1 = 3.50;
-                        drink1 = d1;
+                        drink1 = priceDrinks[0];
                         break;
                     case "Chocolate Pudding":
-                        d2 = 4.50;
-                        drink2 = d2;
+                        drink2 = priceDrinks[1];
                         break;
                     case "Blue Hawailan":
-                        d3 = 3.00;
-                        drink3 = d3;
+                        drink3 = priceDrinks[2];
                         break;
                     case "Pina":
-                        d4 = 5.00;
-                        drink4 = d4;
+                        drink4 = priceDrinks[3];
                         break;
                     case "Lemon Ice":
-                        d5 = 3.00;
-                        drink5 = d5;
+                        drink5 = priceDrinks[4];
+                        break;
+                    case "Margarita":
+                        drink6 = priceDrinks[5];
+                        break;
+                    case "Cosmopolitan":
+                        drink7 = priceDrinks[6];
+                        break;
+                    case "Moscow Mule":
+                        drink8 = priceDrinks[7];
+                        break;
+                    case "Martini":
+                        drink9 = priceDrinks[8];
+                        break;
+                    case "Watermelon slush":
+                        drink10 = priceDrinks[9];
+                        break;
+                    case "Orange Punch":
+                        drink11 = priceDrinks[10];
+                        break;
+                    case "Hot chocolate":
+                        drink12 = priceDrinks[11];
                         break;
                     }
-                    totalForDrinks = drink1 + drink2 + drink3 + drink4 + drink5;
+                    totalForDrinks = drink1 + drink2 + drink3 + drink4 + drink5+ drink6+ drink7+ drink8+ drink9+ drink10+ drink11+ drink12;
                     total = totalForFoods + totalForDrinks + totalForDesserts;
                     textField.setText(total + "");
                     dtm.addRow(new Object[] { drinkLabel[i].getText(), quantity, totalPrice, numSpinnerDrinks[i] });
@@ -588,23 +871,51 @@ public class FoodMenu {
                 }
 
             }
-
-        }
-    };
-
-    public void setVisible(boolean b) throws IOException {
-    }
-
-public static void main(String args[]) throws IOException{
+        };
     
+};
+private User getTotalBill(int total_bill) {
+            User user = new User();
+            String custom_id= user.id;
+            System.out.println(custom_id);
+            int customer_id = 1;
+            final String DB_URL = "jdbc:mysql://localhost:3306/onlineFood?serverTimezone=UTC";
+            final String USERNAME = "root";
+            final String PASSWORD = "Prachip@109";
+            try{
+                Connection conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
+                String sql = "SELECT * FROM login WHERE id = 2";
+                PreparedStatement preparedStatement = conn.prepareStatement(sql);
+                ResultSet resultSet = preparedStatement.executeQuery();
+                String sql1 = "INSERT INTO orders (customer_id , total) " + "VALUES("+customer_id+"," + total_bill +")";
+                PreparedStatement preparedStatement1 = conn.prepareStatement(sql1);
+                int resultSet1 = preparedStatement1.executeUpdate();
+                if (resultSet1 > 0) {
+                    user = new User();
+                    user.total= Integer.toString(total_bill);
+                }
+                if(resultSet.next())
+                {
+                    //user = new User();
+                    user.name = resultSet.getString("name");
+                    user.email = resultSet.getString("email");
+                    user.phone = resultSet.getString("phone");
+                    user.address = resultSet.getString("address");
+                    user.password = resultSet.getString("password");
+                    user.id = resultSet.getString("id");
+                    user.total = Integer.toString(total_bill);
+                }
+                preparedStatement.close();
+                conn.close();
+            }catch(Exception e){
+                System.out.println(e);
+            }
+            return user;
+        };
+public static void main(String args[]) throws IOException
+{
         FoodMenu main = new FoodMenu();
-        main.createAndShowGUI();
-        //  frame = new JFrame();
-        // frame.setTitle("898 Food Ordering System");
-        // frame.getContentPane().add(main);
-        // frame.pack();
-        // frame.setLocationRelativeTo(null);
-        main.setVisible(true);
-    }
+        main.FoodMenuFrame();
+    
 }
-
+}

@@ -1,46 +1,68 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.sql.*;
-
 import javax.swing.*;
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
+import javax.swing.border.EmptyBorder;
 
 //import com.formdev.flatlaf.FlatDarculaLaf;
 
 public class LoginForm extends JFrame {
-    final private Font mainFont = new Font("Segoe print", Font.BOLD, 18);
-    JTextField tfEmail;
+   
+    JTextField tfEmail,tfname,tfphone,tfaddress ;
+    JLabel screen,lblHead ,lblLogin, lblName , lblEmail , lblPhone , lblAddress , lblPassword;
     JPasswordField pfPassword;
 
-    public void initialize() {
+    public void initialize() throws IOException {
         /***** Form Panel *****/
-        JLabel lbLoginForm = new JLabel("Login Form", SwingConstants.CENTER);
-        lbLoginForm.setFont(mainFont);
+        Container c = getContentPane();
+        c.setLayout(null);
+        lblHead = new JLabel("Login");
+        lblHead.setBounds(650,80,300,35);
+        lblHead.setFont(new Font("verdana" ,Font.BOLD, 27));
+        c.add(lblHead);
 
-        JLabel lbEmail = new JLabel("Email");
-        lbEmail.setFont(mainFont);
+
+        
+
+        lblEmail = new JLabel("Email-id");
+        lblEmail.setBounds(650,200,170,27);
+        lblEmail.setFont(new Font("verdana" ,Font.BOLD, 22));
+        c.add(lblEmail);
 
         tfEmail = new JTextField();
-        tfEmail.setFont(mainFont);
-
-        JLabel lbPassword = new JLabel("Password");
-        lbPassword.setFont(mainFont);
-
+        tfEmail.setBounds(850,200,300,27);
+        tfEmail.setFont(new Font("verdana" ,Font.BOLD, 15));
+        c.add(tfEmail);
+        //name inputbox
+         //sapid label
+        
+        //radiobutton
+        lblPassword = new JLabel("Password");
+        lblPassword.setBounds(650,300,170,27);
+        lblPassword.setFont(new Font("verdana" ,Font.BOLD, 22));
+        c.add(lblPassword);
+        //to select department
         pfPassword = new JPasswordField();
-        pfPassword.setFont(mainFont);
+        pfPassword.setBounds(850,300,300,27);
+        pfPassword.setFont(new Font("verdana" ,Font.BOLD, 15));
+        c.add(pfPassword);
 
-        JPanel formPanel = new JPanel();
-        formPanel.setLayout(new GridLayout(0, 1, 10, 10));
-        formPanel.setBorder(BorderFactory.createEmptyBorder(30, 50, 30, 50));
-        formPanel.add(lbLoginForm);
-        formPanel.add(lbEmail);
-        formPanel.add(tfEmail);
-        formPanel.add(lbPassword);
-        formPanel.add(pfPassword);
+        BufferedImage myPicture;
+        myPicture = ImageIO.read(getClass().getResource("/image/order.jpg"));
+        screen = new JLabel(new ImageIcon(myPicture));
+        screen.setBounds(0,-90,550, 800);
+        screen.setBorder(new EmptyBorder(300,60,10,10));
+        c.add(screen);
 
         /***** Buttons Panel *****/
         JButton btnLogin = new JButton("Login");
-        btnLogin.setFont(mainFont);
+        btnLogin.setFont(new Font("verdana" ,Font.BOLD, 18));
+        btnLogin.setBounds(650,400,170,27);
+        c.add(btnLogin);
         btnLogin.addActionListener(new ActionListener() {
 
             @Override
@@ -52,9 +74,14 @@ public class LoginForm extends JFrame {
                 User user = getAuthenticatedUser(email, password);
 
                 if (user != null) {
-                    MainFrame mainFrame = new MainFrame();
-                    mainFrame.initialize(user);
+                    try {
+                        Homepage.main(null);
+                        
                     dispose();
+                    } catch (IOException e1) {
+                        // TODO Auto-generated catch block
+                        e1.printStackTrace();
+                    }
                 }
                 else {
                     JOptionPane.showMessageDialog(LoginForm.this,
@@ -67,7 +94,9 @@ public class LoginForm extends JFrame {
         });
 
         JButton btnCancel = new JButton("Cancel");
-        btnCancel.setFont(mainFont);
+        btnCancel.setFont(new Font("verdana" ,Font.BOLD, 18));
+        btnCancel.setBounds(980,400,170,27);
+        c.add(btnCancel);
         btnCancel.addActionListener(new ActionListener() {
 
             @Override
@@ -78,23 +107,41 @@ public class LoginForm extends JFrame {
             
         });
 
-        JPanel buttonsPanel = new JPanel();
-        buttonsPanel.setLayout(new GridLayout(1, 2, 10, 0));
-        buttonsPanel.setBorder(BorderFactory.createEmptyBorder(30, 50, 30, 50));
-        buttonsPanel.add(btnLogin);
-        buttonsPanel.add(btnCancel);
+        lblLogin = new JLabel("Create New Account ? ");
+        lblLogin.setBounds(700,500,200,27);
+        lblLogin.setFont(new Font("verdana" ,Font.BOLD, 15));
+        c.add(lblLogin);
+
+        JButton btnLogindirect = new JButton("Sign Up");
+        btnLogindirect.setFont(new Font("verdana" ,Font.BOLD, 15));
+        btnLogindirect.setBounds(900,500,170,27);
+        c.add(btnLogindirect);
+        btnLogindirect.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // TODO Auto-generated method stub
+                SignUpForm mainFrame = new SignUpForm();
+                try {
+                    mainFrame.initialize();
+                } catch (IOException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
+                dispose();
+            }
+            
+        });
+        
 
 
 
-        /***** Initialise the frame *****/
-        add(formPanel, BorderLayout.NORTH);
-        add(buttonsPanel, BorderLayout.SOUTH);
+
 
         setTitle("Login Form");
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        setSize(400, 500);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setMinimumSize(new Dimension(350, 450));
-        //setResizable(false);
         setLocationRelativeTo(null);
         setVisible(true);
     }
@@ -102,7 +149,7 @@ public class LoginForm extends JFrame {
 
 
     private User getAuthenticatedUser(String email, String password) {
-        User user = null;
+        User user = new User();
 
         final String DB_URL = "jdbc:mysql://localhost:3306/onlineFood?serverTimezone=UTC";
         final String USERNAME = "root";
@@ -141,7 +188,7 @@ public class LoginForm extends JFrame {
     }
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         try {
            // UIManager.setLookAndFeel( new FlatDarculaLaf() );
         } catch( Exception ex ) {
