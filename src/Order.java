@@ -100,6 +100,12 @@ submit.addActionListener(new ActionListener() {
     @Override
     public void actionPerformed(ActionEvent e) {
         // TODO Auto-generated method stub
+        try {
+            SendEmail.send("prachipp999@gmail.com" , user.total , user.name , user.phone , user.address);
+        } catch (Exception e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
         dispose();
         
     }
