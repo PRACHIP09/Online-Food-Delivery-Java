@@ -1,5 +1,3 @@
-// File Name SendEmail.java
-
 import java.util.*;
 import java.util.logging.Logger;
 import javax.mail.*;
@@ -14,7 +12,7 @@ public class SendEmail {
       String address_cust = address;
       String total_cust = total;
       System.out.println("preparing to send the mail");
-      System.out.println(total + Name + phone + address);
+      //System.out.println(total + Name + phone + address);
       String host = "smtp.gmail.com";
       Properties properties = new Properties();
       properties.put("mail.smtp.auth", "true");
@@ -47,7 +45,7 @@ public class SendEmail {
          Message message = new MimeMessage(session);
          message.setFrom(new InternetAddress(from));
          message.setRecipient(Message.RecipientType.TO, new InternetAddress(to));
-         message.setSubject("hello\n");
+         message.setSubject("Your Order has been confirmed\n");
          String htmlText = "<center><h1>Woo hoo!<br/>" + Name_cust
                + "<br/>Your order is on its way. Your order details can be found below.</h1><img src='https://image.freepik.com/free-vector/full-shopping-cart-food-store-supermarket-set-fresh-healthy-natural-product_460582-382.jpg'><br/><h2>SHIPPING ADDRESS:" + address_cust
                + "</h2><h2><br/>Order Total:" + total_cust + "</h2><h4></br></center> Your new product will work great paired with:BEVERAGES</h4>";
@@ -60,17 +58,3 @@ public class SendEmail {
       return null;
    }
 }
-
-// // first part (the html)
-// BodyPart messageBodyPart = new MimeBodyPart();
-// String htmlText = "<H1>Hello</H1><img src="cid:image">";
-// messageBodyPart.setContent(htmlText, "text/html");
-// // add it
-// multipart.addBodyPart(messageBodyPart);
-// // second part (the image)
-// messageBodyPart = new MimeBodyPart();
-// DataSource fds = new FileDataSource(
-// "/home/manisha/javamail-mini-logo.png");
-
-// messageBodyPart.setDataHandler(new DataHandler(fds));
-// messageBodyPart.setHeader("Content-ID", "<image>");

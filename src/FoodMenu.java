@@ -1,4 +1,5 @@
 import java.awt.Font;
+import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
@@ -21,12 +22,10 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
-
 import java.sql.Connection;  
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;  
-
 public class FoodMenu extends JFrame implements ActionListener{
     java.awt.Container c;
     JButton backButton, orderButton;
@@ -38,72 +37,58 @@ public class FoodMenu extends JFrame implements ActionListener{
     Double[] priceDrinks;
     Double[] priceDesserts;
     double totalPrice = 0;
-
     JSpinner[] numSpinner;
     JLabel[] foodLabel;
     JLabel[] foodImage;
     String[] file;
-
     JSpinner[] numSpinnerDrinks;
     JLabel[] drinkLabel;
     JLabel[] drinkImage;
     String[] fileDrinks;
-
     JSpinner[] numSpinnerDesserts;
     JLabel[] dessertLabel;
     JLabel[] dessertImage;
     String[] fileDesserts;
-
     int ELEMENTS = 12;
     int DRINK_ELEMENTS = 12;
     int DESSERT_ELEMENTS = 12;
-
     double total = 0;
     double food1, food2, food3, food4, food5, food6, food7, food8, food9, food10, food11, food12;
     double drink1, drink2, drink3, drink4, drink5, drink6, drink7, drink8, drink9, drink10, drink11, drink12;
     double pr, pr1, pr2, pr3, pr4, pr5, pr6, pr7, pr8, pr9, pr10, pr11;
-
     double totalForFoods;
     double totalForDrinks;
     double totalForDesserts;
-
-    public void FoodMenuFrame() throws IOException {
+    public void FoodMenuFrame(String id) throws IOException {
         setTitle("Main Menu");
         setBounds(0, 0,1382,744);
-        //setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         c = getContentPane();
         c.setLayout(null);
-        // frame.setLocationRelativeTo(null);
+        c.setBackground(Color.decode("#151515"));
         JLabel lblFoodOrdered = new JLabel("Food Ordered");
         lblFoodOrdered.setFont(new Font("Verdana", Font.BOLD, 15));
-        lblFoodOrdered.setBounds(980, 11, 200, 24); //set bounds is like mix of set size and location
+        lblFoodOrdered.setBounds(980, 11, 200, 24);
+        lblFoodOrdered.setForeground(Color.white); //set bounds is like mix of set size and location
         c.add(lblFoodOrdered);
-
         dtm = new DefaultTableModel(0, 0);
         final String header[] = new String[] { "Item", "Qty", "Price", "Spinner" };
         dtm.setColumnIdentifiers(header);
         dtm.addRow(header);
-
-
         table = new JTable();
         table.setModel(dtm);
         table.setBounds(920, 40, 400, 500); // int x, int y, int width, int height
-        // table.setSize(245, 300); // width,height
         table.getColumnModel().getColumn(0).setPreferredWidth(80);
         table.getColumnModel().getColumn(1).setPreferredWidth(30);
         table.getColumnModel().getColumn(2).setPreferredWidth(30);
         table.getColumnModel().getColumn(3).setMinWidth(0); // hide spinner
-                                                            // column
         table.getColumnModel().getColumn(3).setMaxWidth(0); // hide spinner
-                                                            // column
         table.setShowGrid(true); // remove cell boarder
         c.add(table);
-
-
         JLabel lblTotal = new JLabel("Total  : ");
         lblTotal.setBounds(950, 550, 200, 25);
         lblTotal.setFont(new Font("verdana" ,Font.BOLD, 15));
+        lblTotal.setForeground(Color.white);
         c.add(lblTotal);
 
 
@@ -118,19 +103,62 @@ public class FoodMenu extends JFrame implements ActionListener{
         orderButton.setBounds(950, 600, 89, 23);
         orderButton.addActionListener(this);
         c.add(orderButton);
+        orderButton.addActionListener(new ActionListener() {
 
+            
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // TODO Auto-generated method stub
+                if (textField.getText().equals("")) 
+            {
+                JOptionPane.showMessageDialog(null, "You not ordered anything yet");
+            } 
+            int total_bill = (int)Math.round(total);
+            int user_id = Integer.parseInt(id);
+            User user = getTotalBill(total_bill, user_id);
+            if(user != null)
+            {
+                 Order mainFrame = new Order();
+                 try {
+                     mainFrame.initialize(user);
+                 } catch (IOException e1) {
+                     // TODO Auto-generated catch block
+                     e1.printStackTrace();
+                 }
+                 dispose();
+            }
+            }
+           
+            
+        });
 
         backButton = new JButton("Back");
         backButton.setBounds(1050, 600, 89, 23);
         backButton.addActionListener(this);
         c.add(backButton);
+        backButton.addActionListener(new ActionListener() {
 
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // TODO Auto-generated method stub
+                try {
+                    // menu = new Homepage();
+                     Homepage.main(null);
+                     dispose();
+                 } catch (IOException e1) {
+                     // TODO Auto-generated catch block
+                     e1.printStackTrace();
+                 }
+            }
+            
+        });
 
         JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
         addIt(tabbedPane, "Foods");
         addIt1(tabbedPane, "Drinks");
         addIt2(tabbedPane, "Desserts");
         tabbedPane.setBounds(8, 10, 900, 670);
+        tabbedPane.setBackground(Color.decode("#2ADDC0"));
         c.add(tabbedPane);
 
         setVisible(true);
@@ -138,6 +166,7 @@ public class FoodMenu extends JFrame implements ActionListener{
 
     void addIt(JTabbedPane tabbedPane, String text) throws IOException {
         JPanel panel = new JPanel(new GridBagLayout());
+        panel.setBackground(Color.decode("#2ADDC0"));
         gbc = new GridBagConstraints();
         foodImage = new JLabel[ELEMENTS];
         foodLabel = new JLabel[ELEMENTS];
@@ -183,18 +212,18 @@ public class FoodMenu extends JFrame implements ActionListener{
         foodLabel[11] = new JLabel("Burger");
         foodLabel[11].setFont(new Font("Verdana", Font.BOLD, 12));
 
-        price[0] = 3.50;
-        price[1] = 4.50;
-        price[2] = 3.70;
-        price[3] = 4.50;
-        price[4] = 5.50;
-        price[5] = 4.00;
-        price[6] = 3.50;
-        price[7] = 6.50;
-        price[8] = 7.50;
-        price[9] = 8.50;
-        price[10] = 9.50;
-        price[11] = 5.50;
+        price[0] = 350.00;
+        price[1] = 450.00;
+        price[2] = 370.00;
+        price[3] = 450.00;
+        price[4] = 550.00;
+        price[5] = 400.00;
+        price[6] = 350.00;
+        price[7] = 650.00;
+        price[8] = 755.00;
+        price[9] = 375.00;
+        price[10] = 325.00;
+        price[11] = 350.00;
 
         for (int i = 0; i < ELEMENTS; i++) {
         try {
@@ -231,6 +260,7 @@ public class FoodMenu extends JFrame implements ActionListener{
 
     void addIt1(JTabbedPane tabbedPane, String text) throws IOException {
         JPanel panel = new JPanel(new GridBagLayout());
+        panel.setBackground(Color.decode("#2ADDC0"));
         GridBagConstraints gbc = new GridBagConstraints();
         drinkImage = new JLabel[DRINK_ELEMENTS];
         drinkLabel = new JLabel[DRINK_ELEMENTS];
@@ -277,18 +307,18 @@ public class FoodMenu extends JFrame implements ActionListener{
         drinkLabel[11] = new JLabel("Hot chocolate");
         drinkLabel[11].setFont(new Font("Verdana", Font.BOLD, 12));
 
-        priceDrinks[0] = 3.50;
-        priceDrinks[1] = 4.50;
-        priceDrinks[2] = 3.00;
-        priceDrinks[3] = 5.00;
-        priceDrinks[4] = 3.00;
-        priceDrinks[5] = 3.50;
-        priceDrinks[6] = 4.50;
-        priceDrinks[7] = 3.00;
-        priceDrinks[8] = 5.00;
-        priceDrinks[9] = 3.00;
-        priceDrinks[10] = 3.00;
-        priceDrinks[11] = 5.00;
+        priceDrinks[0] = 350.00;
+        priceDrinks[1] = 450.00;
+        priceDrinks[2] = 300.00;
+        priceDrinks[3] = 500.00;
+        priceDrinks[4] = 300.00;
+        priceDrinks[5] = 350.00;
+        priceDrinks[6] = 450.00;
+        priceDrinks[7] = 300.00;
+        priceDrinks[8] = 500.00;
+        priceDrinks[9] = 300.00;
+        priceDrinks[10] = 300.00;
+        priceDrinks[11] = 500.00;
 
 
         for (int i = 0; i < DRINK_ELEMENTS; i++) {
@@ -321,6 +351,7 @@ public class FoodMenu extends JFrame implements ActionListener{
 
     void addIt2(JTabbedPane tabbedPane, String text) throws IOException {
         JPanel panel = new JPanel(new GridBagLayout());
+        panel.setBackground(Color.decode("#2ADDC0"));
         GridBagConstraints gbc = new GridBagConstraints();
         dessertImage = new JLabel[DESSERT_ELEMENTS];
         dessertLabel = new JLabel[DESSERT_ELEMENTS];
@@ -366,18 +397,18 @@ public class FoodMenu extends JFrame implements ActionListener{
         dessertLabel[11] = new JLabel("Swedish Almond Cake");
         dessertLabel[11].setFont(new Font("Verdana", Font.BOLD, 12));
 
-        priceDesserts[0] = 2.50;
-        priceDesserts[1] = 3.00;
-        priceDesserts[2] = 2.50;
-        priceDesserts[3] = 3.00;
-        priceDesserts[4] = 2.50;
-        priceDesserts[5] = 3.00;
-        priceDesserts[6] = 2.50;
-        priceDesserts[7] = 3.00;
-        priceDesserts[8] = 2.50;
-        priceDesserts[9] = 3.00;
-        priceDesserts[10] = 2.50;
-        priceDesserts[11] = 3.00;
+        priceDesserts[0] = 450.00;
+        priceDesserts[1] = 300.00;
+        priceDesserts[2] = 450.00;
+        priceDesserts[3] = 300.00;
+        priceDesserts[4] = 450.00;
+        priceDesserts[5] = 300.00;
+        priceDesserts[6] = 550.00;
+        priceDesserts[7] = 300.00;
+        priceDesserts[8] = 450.00;
+        priceDesserts[9] = 300.00;
+        priceDesserts[10] = 350.00;
+        priceDesserts[11] = 300.00;
 
         for (int i = 0; i < DESSERT_ELEMENTS; i++) {
             Image image = ImageIO.read(this.getClass().getResource(fileDesserts[i]));
@@ -407,41 +438,7 @@ public class FoodMenu extends JFrame implements ActionListener{
 
     }
 
-    public void actionPerformed(ActionEvent ae)
-    {
-        if(ae.getSource() == backButton)
-        {
-            try {
-                   // menu = new Homepage();
-                    Homepage.main(null);
-                    dispose();
-                } catch (IOException e1) {
-                    // TODO Auto-generated catch block
-                    e1.printStackTrace();
-                }
-        }
-        else if(ae.getSource() == orderButton)
-        {
-            if (textField.getText().equals("")) 
-            {
-                JOptionPane.showMessageDialog(null, "You not ordered anything yet");
-            } 
-            int total_bill = (int)Math.round(total);
-            User user = getTotalBill(total_bill);
-            if(user != null)
-            {
-                 Order mainFrame = new Order();
-                 try {
-                     mainFrame.initialize(user);
-                 } catch (IOException e1) {
-                     // TODO Auto-generated catch block
-                     e1.printStackTrace();
-                 }
-                 dispose();
-            }
-           
-        }
-    }
+    public void actionPerformed(ActionEvent ae){}
 
     ChangeListener listener = new ChangeListener() {
         public void stateChanged(ChangeEvent e) {
@@ -874,20 +871,18 @@ public class FoodMenu extends JFrame implements ActionListener{
         };
     
 };
-private User getTotalBill(int total_bill) {
+private User getTotalBill(int total_bill , int id) {
             User user = new User();
-            String custom_id= user.id;
-            System.out.println(custom_id);
-            int customer_id = 1;
             final String DB_URL = "jdbc:mysql://localhost:3306/onlineFood?serverTimezone=UTC";
             final String USERNAME = "root";
             final String PASSWORD = "Prachip@109";
             try{
                 Connection conn = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
-                String sql = "SELECT * FROM login WHERE id = 2";
+                String sql = "SELECT * FROM login WHERE id = ?";
                 PreparedStatement preparedStatement = conn.prepareStatement(sql);
+                preparedStatement.setInt(1, id);
                 ResultSet resultSet = preparedStatement.executeQuery();
-                String sql1 = "INSERT INTO orders (customer_id , total) " + "VALUES("+customer_id+"," + total_bill +")";
+                String sql1 = "INSERT INTO orders (customer_id , total) " + "VALUES("+id+"," + total_bill +")";
                 PreparedStatement preparedStatement1 = conn.prepareStatement(sql1);
                 int resultSet1 = preparedStatement1.executeUpdate();
                 if (resultSet1 > 0) {
@@ -912,10 +907,5 @@ private User getTotalBill(int total_bill) {
             }
             return user;
         };
-public static void main(String args[]) throws IOException
-{
-        FoodMenu main = new FoodMenu();
-        main.FoodMenuFrame();
-    
-}
+
 }

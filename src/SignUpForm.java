@@ -21,7 +21,6 @@ public class SignUpForm extends JFrame {
         lblHead.setFont(new Font("verdana" ,Font.BOLD, 27));
         c.add(lblHead);
 
-
         //name label
         lblName = new JLabel("Name");
         lblName.setBounds(650,200,170,27);

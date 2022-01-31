@@ -6,8 +6,6 @@ import java.sql.*;
 import javax.swing.*;
 import javax.imageio.ImageIO;
 
-//import com.formdev.flatlaf.FlatDarculaLaf;
-
 public class LoginForm extends JFrame {
    
     JTextField tfEmail,tfname,tfphone,tfaddress ;
@@ -15,7 +13,7 @@ public class LoginForm extends JFrame {
     JPasswordField pfPassword;
 
     public void initialize() throws IOException {
-        /***** Form Panel *****/
+        
         Container c = getContentPane();
         c.setLayout(null);
         lblHead = new JLabel("Login");
@@ -23,9 +21,6 @@ public class LoginForm extends JFrame {
         lblHead.setBounds(650,80,300,35);
         lblHead.setFont(new Font("verdana" ,Font.BOLD, 27));
         c.add(lblHead);
-
-
-        
 
         lblEmail = new JLabel("Email-id");
         lblEmail.setBounds(650,200,170,27);
@@ -36,10 +31,7 @@ public class LoginForm extends JFrame {
         tfEmail.setBounds(850,200,300,27);
         tfEmail.setFont(new Font("verdana" ,Font.BOLD, 15));
         c.add(tfEmail);
-        //name inputbox
-         //sapid label
-        
-        //radiobutton
+
         lblPassword = new JLabel("Password");
         lblPassword.setBounds(650,300,170,27);
         lblPassword.setFont(new Font("verdana" ,Font.BOLD, 22));
@@ -73,13 +65,13 @@ public class LoginForm extends JFrame {
 
                 if (user != null) {
                     try {
-                        Homepage.main(null);
-                        
-                    dispose();
+                        Homepage.main(user);
                     } catch (IOException e1) {
                         // TODO Auto-generated catch block
                         e1.printStackTrace();
                     }
+                    
+                    dispose();
                 }
                 else {
                     JOptionPane.showMessageDialog(LoginForm.this,
@@ -130,12 +122,7 @@ public class LoginForm extends JFrame {
             }
             
         });
-        
-
-
-
-
-
+     
         setTitle("Login Form");
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -147,7 +134,7 @@ public class LoginForm extends JFrame {
 
 
     private User getAuthenticatedUser(String email, String password) {
-        User user = new User();
+        User user = null;
 
         final String DB_URL = "jdbc:mysql://localhost:3306/onlineFood?serverTimezone=UTC";
         final String USERNAME = "root";

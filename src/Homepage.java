@@ -10,7 +10,7 @@ class MyFrame extends JFrame implements Runnable, ActionListener {
     JLabel title, ad, label, image, label1, title2, image2;
     JButton menu, navMenu, navLogin, navSignup;
 
-    public MyFrame() throws IOException {
+    public MyFrame(User user) throws IOException {
         setTitle("Advertisement");
         setBounds(300, 90, 900, 600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -74,6 +74,22 @@ class MyFrame extends JFrame implements Runnable, ActionListener {
         menu.setBackground(Color.green);
         menu.setForeground(Color.darkGray);
         c.add(menu);
+        menu.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // TODO Auto-generated method stub
+                FoodMenu main = new FoodMenu();
+                try {
+                    main.FoodMenuFrame(user.id);
+                } catch (IOException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
+            dispose();
+            }
+            
+        });
 
         navLogin = new JButton("Login");
         navLogin.setSize(100, 30);
@@ -81,13 +97,42 @@ class MyFrame extends JFrame implements Runnable, ActionListener {
         navLogin.setBackground(Color.darkGray);
         navLogin.setForeground(Color.white);
         c.add(navLogin);
+        navLogin.addActionListener(new ActionListener() {
 
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                LoginForm mainFrame = new LoginForm();
+                    try {
+                        mainFrame.initialize();
+                    } catch (IOException e1) {
+                        // TODO Auto-generated catch block
+                        e1.printStackTrace();
+                    }
+                    dispose();
+            }
+            
+        });
         navSignup = new JButton("Signup");
         navSignup.setSize(100, 30);
         navSignup.setLocation(940, 30);
         navSignup.setBackground(Color.darkGray);
         navSignup.setForeground(Color.white);
         c.add(navSignup);
+        navLogin.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                SignUpForm signupform = new SignUpForm();
+            try {
+                signupform.initialize();
+            } catch (IOException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
+            dispose();
+            }
+            
+        });
 
         navMenu = new JButton("Menu");
         navMenu.setSize(100, 30);
@@ -95,6 +140,22 @@ class MyFrame extends JFrame implements Runnable, ActionListener {
         navMenu.setBackground(Color.darkGray);
         navMenu.setForeground(Color.white);
         c.add(navMenu);
+        navMenu.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // TODO Auto-generated method stub
+                FoodMenu main = new FoodMenu();
+                try {
+                    main.FoodMenuFrame(user.id);
+                } catch (IOException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
+            dispose();
+            }
+            
+        });
 
         menu.addActionListener(this);
         navSignup.addActionListener(this);
@@ -127,45 +188,13 @@ class MyFrame extends JFrame implements Runnable, ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == menu || e.getSource() == navMenu) {
-            FoodMenu main = new FoodMenu();
-                try {
-                    main.FoodMenuFrame();
-                } catch (IOException e1) {
-                    // TODO Auto-generated catch block
-                    e1.printStackTrace();
-                }
-            dispose();
-        }
-        if (e.getSource() == navSignup) {
-
-            SignUpForm signupform = new SignUpForm();
-            try {
-                signupform.initialize();
-            } catch (IOException e1) {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
-            }
-            dispose();
-        }
-        if (e.getSource() == navLogin) {
-                LoginForm mainFrame = new LoginForm();
-                    try {
-                        mainFrame.initialize();
-                    } catch (IOException e1) {
-                        // TODO Auto-generated catch block
-                        e1.printStackTrace();
-                    }
-                    dispose();
-
-        }
+    // TODO Auto-generated method stub     
     }
-}
-
+};
 public class Homepage {
 
-    public static void main(String[] args) throws IOException {
-        MyFrame frame = new MyFrame();
+    public static void main(User user) throws IOException {
+        MyFrame frame = new MyFrame(user);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setMinimumSize(new Dimension(450, 650));
         frame.setLocationRelativeTo(null);
